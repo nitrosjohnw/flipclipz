@@ -71,7 +71,8 @@ const Profile = () => {
           <InfoBox
             title={user?.username}
             containerStyles='mt-5'
-            titleStyles='text-lg' subtitle={undefined}          />
+            titleStyles='text-lg' 
+            subtitle={undefined}          />
           <View className='flex-row mt-5'>
             <InfoBox
             title={posts.length || 0}

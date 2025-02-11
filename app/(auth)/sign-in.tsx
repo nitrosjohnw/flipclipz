@@ -32,7 +32,6 @@ const SignIn = () => {
           setIsLoggedIn(true);
           router.replace('/(tabs)/home');
       } catch (error: unknown) {
-          // Type narrow the error object
           if (error instanceof Error) {
               console.error('Sign-in Error:', error);
               Alert.alert('Error', error.message || 'An unexpected error occurred during sign-in.');

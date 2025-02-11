@@ -1,10 +1,10 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { getCurrentUser } from '../lib/appwrite';
 
-// Create Context
+
 const GlobalContext = createContext(null);
 
-// Custom hook to use the GlobalContext safely
+
 export const useGlobalContext = () => {
     const context = useContext(GlobalContext);
     if (!context) {
@@ -13,7 +13,7 @@ export const useGlobalContext = () => {
     return context;
 };
 
-const GlobalProvider = ({ children }) => { // ✅ Fixed: Removed TypeScript annotation
+const GlobalProvider = ({ children }) => { 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(true);

@@ -46,7 +46,7 @@ export default function Index() {
         </View>
 
       </ScrollView>
-      <StatusBar backgroundColor='#e22020'/>
+      <StatusBar backgroundColor='#040404'/>
     </SafeAreaView>
   );
 }

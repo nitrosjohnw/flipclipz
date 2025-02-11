@@ -18,10 +18,8 @@ function VideoCard({
 
   return (
     <View className="flex-col items-center px-4 mb-14">
-      {/* Header Section */}
       <View className="flex-row gap-3 items-start">
         <View className="justify-center items-center flex-row flex-1">
-          {/* Avatar */}
           <View className="w-[46px] h-[46px] rounded-lg border border-secondary justify-center items-center p-0.5">
             <Image
               source={{ uri: avatar }}
@@ -29,7 +27,6 @@ function VideoCard({
               resizeMode="cover"
             />
           </View>
-          {/* Title and Username */}
           <View className="justify-center flex-1 ml-3">
             <Text
               className="text-white font-psemibold text-sm"
@@ -44,26 +41,24 @@ function VideoCard({
               {username}
             </Text>
           </View>
-          {/* Sport */}
           <Text className="text-white font-psemibold text-sm" numberOfLines={1}>
             {sport}
           </Text>
         </View>
-        {/* Menu Icon */}
         <View className="pt-3">
           <Image source={icons.menu} className="w-7 h-7" resizeMode="contain" />
         </View>
       </View>
 
-      {/* Video or Thumbnail */}
+
       {play ? (
         <Video
   source={{ uri: video }}
   style={{
-    width: '100%', // Ensure full width
-    height: 320, // Provide explicit height
+    width: '100%', 
+    height: 320, 
     borderRadius: 15,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)', // Add background for visibility
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
   }}
   resizeMode={ResizeMode.CONTAIN}
   useNativeControls
@@ -87,13 +82,11 @@ function VideoCard({
           onPress={() => setPlay(true)}
           className="w-full h-80 relative"
         >
-          {/* Thumbnail */}
           <Image
             source={{ uri: thumbnail }}
             className="w-full h-full rounded-xl mt-3"
             resizeMode="cover"
           />
-          {/* Play Icon */}
           <View className="absolute inset-0 justify-center items-center">
             <Image
               source={icons.play}
