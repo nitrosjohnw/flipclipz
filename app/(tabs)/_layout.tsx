@@ -72,16 +72,16 @@ const TabsLayout = () => {
         }}
         />
                 <Tabs.Screen 
-        name="edit"
+        name="social"
         options={{
-            title: 'Edit',
+            title: 'Social',
             headerShown: false,
             tabBarIcon:({color, focused}) => (
                 <TabIcon
-                    icon={icons.edit} 
+                    icon={icons.social} 
                     focused={focused} 
                     color={color} 
-                    name={'   Edit'}                
+                    name={'  Social'}                
                     />
             )
         }}

@@ -26,7 +26,7 @@ const Home = () => {
     <SafeAreaView className='bg-primary h-full'>
       <FlatList
       data={posts}
-      keyExtractor={(item) => item}  
+      keyExtractor={(item) => item.$id}  
       renderItem={({ item }) => (
       <VideoCard video={item}/>
 
@@ -54,7 +54,8 @@ const Home = () => {
           <SearchInput 
           otherStyles={undefined} 
           handleChangeText={undefined} 
-          title={''} value={undefined} 
+          title={''} 
+          value={undefined} 
           placeholder={''}/>
           <View className='w-full flex-1 pt-5 pb-8'>
             <Text className='text-white text-lg font-pregular mb-3'>

@@ -15,8 +15,14 @@ import edit from "../assets/icons/edit.png";
 import logo from "../assets/icons/logo.png";
 import cards from "../assets/icons/cards.png";
 import play from "../assets/icons/play.png";
+import social from "../assets/icons/social.png";
+import comment from "../assets/icons/comment.png";
+import like from "../assets/icons/like.png";
 
 export default {
+  comment,
+  like,
+  social,
   play,
   cards,
   logo,
