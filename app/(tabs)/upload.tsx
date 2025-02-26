@@ -1,4 +1,13 @@
-import { View, Text, ScrollView, TouchableOpacity, Image, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  Alert,
+  Modal,
+  Pressable,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FormField from '@/components/FormField';
 import React, { useState, useEffect } from 'react';
@@ -10,6 +19,17 @@ import { router } from 'expo-router';
 import { createVideo } from '@/lib/appwrite';
 import { useGlobalContext } from '@/context/GlobalProvider';
 
+const sportsOptions = [
+  { label: 'Skateboarding', value: 'Skateboarding' },
+  { label: 'BMX', value: 'BMX' },
+  { label: 'Climbing', value: 'Climbing' },
+  { label: 'Surfing', value: 'Surfing' },
+  { label: 'Snowboarding', value: 'Snowboarding' },
+  { label: 'Skiing', value: 'Skiing' },
+  { label: 'Other', value: 'Other' },
+  { label: 'Scootering', value: 'Scootering' },
+];
+
 const Upload = () => {
   const { user } = useGlobalContext();
   const [uploading, setUploading] = useState(false);
@@ -19,6 +39,7 @@ const Upload = () => {
     thumbnail: null,
     sport: '',
   });
+  const [showSportModal, setShowSportModal] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -32,8 +53,11 @@ const Upload = () => {
   const openPicker = async (selectType: string) => {
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: selectType === 'image' ? ImagePicker.MediaTypeOptions.Images : ImagePicker.MediaTypeOptions.Videos,
-        allowsEditing: false,
+        mediaTypes:
+          selectType === 'image'
+            ? ImagePicker.MediaTypeOptions.Images
+            : ImagePicker.MediaTypeOptions.Videos,
+        allowsEditing: true, // Editing is now enabled
         quality: 1,
       });
 
@@ -55,43 +79,37 @@ const Upload = () => {
     setForm((prevForm) => ({ ...prevForm, video: null }));
   };
 
-
   const removeImage = () => {
     setForm((prevForm) => ({ ...prevForm, thumbnail: null }));
   };
 
-
   const submit = async () => {
-    if(!form.title || !form.video || !form.thumbnail || !form.sport){
-      return Alert.alert('Please fill in all the fields')
+    if (!form.title || !form.video || !form.thumbnail || !form.sport) {
+      return Alert.alert('Please fill in all the fields');
     }
-    setUploading(true)
+    setUploading(true);
 
     try {
-      await createVideo ({
-        ...form, userId: user.$id
-      })
-      Alert.alert('Succsess', 'Post Uploaded succsessfully')
-      router.push('/(tabs)/home')
-    } catch (error) {
-      Alert.alert('Error', error.message)
+      await createVideo({ ...form, userId: user.$id });
+      Alert.alert('Success', 'Post Uploaded successfully');
+      router.push('/(tabs)/home');
+    } catch (error: any) {
+      Alert.alert('Error', error.message);
     } finally {
       setForm({
         title: '',
         video: null,
         thumbnail: null,
         sport: '',
-      })
-      setUploading(false)
+      });
+      setUploading(false);
     }
   };
 
   return (
     <SafeAreaView className="bg-primary h-full">
-      <ScrollView className="px-4 mt-6">
-        <Text className="text-2xl text-white font-psemibold">
-          Upload Video
-        </Text>
+      <ScrollView className="px-4 mt-6" keyboardShouldPersistTaps="handled">
+        <Text className="text-2xl text-white font-psemibold">Upload Video</Text>
 
         <FormField
           otherStyles="mt-10"
@@ -103,13 +121,8 @@ const Upload = () => {
 
         {/* VIDEO PICKER */}
         <View className="mt-7 space-y-2">
-          <Text className="text-base text-white font-pmedium">
-            Upload Video
-          </Text>
-          <TouchableOpacity 
-            onPress={() => openPicker('video')} 
-            disabled={!!form.video} // Disable picker when a video is selected
-          >
+          <Text className="text-base text-white font-pmedium">Upload Video</Text>
+          <TouchableOpacity onPress={() => openPicker('video')} disabled={!!form.video}>
             {form.video?.uri ? (
               <>
                 <Video
@@ -125,17 +138,13 @@ const Upload = () => {
                   title="Remove Video"
                   handlePress={removeVideo}
                   containerStyles="mt-3 bg-red-500"
-                  textStyles="text-base text-white font-pmedium" 
-                  isLoading={undefined}                />
+                  textStyles="text-base text-white font-pmedium"
+                />
               </>
             ) : (
               <View className="w-full h-40 bg-white rounded-2xl justify-center items-center border-2 border-red-500">
                 <View className="w-14 h-14 border border-dashed border-secondary justify-center items-center">
-                  <Image
-                    source={icons.upload}
-                    resizeMode="contain"
-                    className="w-1/2 h-1/2"
-                  />
+                  <Image source={icons.upload} resizeMode="contain" className="w-1/2 h-1/2" />
                 </View>
               </View>
             )}
@@ -144,13 +153,8 @@ const Upload = () => {
 
         {/* THUMBNAIL PICKER */}
         <View className="mt-7 space-y-2">
-          <Text className="text-base text-white font-pmedium">
-            Thumbnail Image
-          </Text>
-          <TouchableOpacity 
-            onPress={() => openPicker('image')} 
-            disabled={!!form.thumbnail} // Disable picker when an image is selected
-          >
+          <Text className="text-base text-white font-pmedium">Thumbnail Image</Text>
+          <TouchableOpacity onPress={() => openPicker('image')} disabled={!!form.thumbnail}>
             {form.thumbnail?.uri ? (
               <>
                 <Image
@@ -158,22 +162,16 @@ const Upload = () => {
                   resizeMode="cover"
                   style={{ width: '100%', height: 200, borderRadius: 20 }}
                 />
-
-                {/* Remove Thumbnail Button */}
                 <CustomButton
                   title="Remove Thumbnail"
                   handlePress={removeImage}
                   containerStyles="mt-3 bg-red-500"
-                  textStyles="text-base text-white font-pmedium" 
-                  isLoading={undefined}                />
+                  textStyles="text-base text-white font-pmedium"
+                />
               </>
             ) : (
               <View className="w-full h-16 bg-white rounded-2xl justify-center items-center border-2 border-red-500 flex-row space-x-2">
-                <Image
-                  source={icons.upload}
-                  resizeMode="contain"
-                  className="w-5 h-5"
-                />
+                <Image source={icons.upload} resizeMode="contain" className="w-5 h-5" />
                 <Text className="text-sm text-secondary font-pmedium px-4">
                   Upload Thumbnail Image
                 </Text>
@@ -182,22 +180,56 @@ const Upload = () => {
           </TouchableOpacity>
         </View>
 
-        <FormField
-          otherStyles="mt-7"
-          title="Sport"
-          value={form.sport}
-          placeholder="Insert Sport Here..."
-          handleChangeText={(e: any) => setForm({ ...form, sport: e })}
-        />
+        {/* SPORT DROPDOWN USING MODAL */}
+        <View className="mt-7">
+          <Text className="text-base text-white font-pmedium">Select Sport</Text>
+          <TouchableOpacity
+            onPress={() => setShowSportModal(true)}
+            className="bg-white rounded-2xl border-2 border-red-500 p-3"
+          >
+            <Text className="text-secondary">
+              {form.sport
+                ? sportsOptions.find((option) => option.value === form.sport)?.label
+                : 'Select a sport...'}
+            </Text>
+          </TouchableOpacity>
+        </View>
 
         <CustomButton
           title="Post Clip"
           handlePress={submit}
           containerStyles="mt-7"
-          textStyles={undefined}
           isLoading={uploading}
         />
       </ScrollView>
+
+      {/* SPORT SELECTION MODAL */}
+      <Modal
+        visible={showSportModal}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setShowSportModal(false)}
+      >
+        <Pressable
+          onPressOut={() => setShowSportModal(false)}
+          className="flex-1 bg-black bg-opacity-50 justify-center items-center"
+        >
+          <View className="bg-white m-5 rounded-lg p-5 w-full">
+            {sportsOptions.map((option) => (
+              <TouchableOpacity
+                key={option.value}
+                onPress={() => {
+                  setForm({ ...form, sport: option.value });
+                  setShowSportModal(false);
+                }}
+                className="py-2"
+              >
+                <Text className="text-base text-secondary">{option.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </Pressable>
+      </Modal>
     </SafeAreaView>
   );
 };

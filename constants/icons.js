@@ -18,8 +18,10 @@ import play from "../assets/icons/play.png";
 import social from "../assets/icons/social.png";
 import comment from "../assets/icons/comment.png";
 import like from "../assets/icons/like.png";
+import notification from "../assets/icons/notification.png";
 
 export default {
+  notification,
   comment,
   like,
   social,
